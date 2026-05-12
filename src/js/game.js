@@ -14,24 +14,34 @@ export class Game extends Engine {
         this.start(ResourceLoader).then(() => this.startGame())
     }
 
+
     startGame() {
 
         console.log("start de game!")
 
-        for (let i = 0; i < 60; i++) {
+            const background = new Actor({
+            x: this.drawWidth / 2,
+            y: this.drawHeight / 2,
+            z: -1
+        })
+        background.graphics.use(Resources.Background.toSprite())
+        this.add(background)
+
+
+        for (let i = 0; i < 300; i++) {
             const fish = new Actor()
             fish.graphics.use(Resources.Fish.toSprite())
             fish.pos = new Vector(randomInRange(700, 1280), randomInRange(0, 720))
-            fish.vel = new Vector(randomInRange(-200, -1), 0)
+            fish.vel = new Vector(randomInRange(-200, -75), 0)
             fish.events.on("exitviewport", (e) => this.fishLeft(e))
             this.add(fish)
         }
 
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < 3; i++) {
             const bones = new Actor()
             bones.graphics.use(Resources.Bones.toSprite())
-            bones.pos = new Vector(randomInRange(100, 1200), randomInRange(50, 300))
-            bones.vel = new Vector(0, randomInRange(5, 50))
+            bones.pos = new Vector(randomInRange(100, 1200), randomInRange(0, 100))
+            bones.vel = new Vector(0, randomInRange(5, 10))
             bones.events.on("exitviewport", (e) => this.bonesBottom(e))
             this.add(bones)
         }
@@ -40,7 +50,7 @@ export class Game extends Engine {
             const bubbles = new Actor()
             bubbles.graphics.use(Resources.Bubbles.toSprite())
             bubbles.pos = new Vector(randomInRange(0, 1280), randomInRange(720, 800))
-            bubbles.vel = new Vector(0, randomInRange(-50, -5))
+            bubbles.vel = new Vector(0, randomInRange(-1090, -5))
             bubbles.events.on("exitviewport", (e) => this.bubblesTop(e))
             this.add(bubbles)
         }
@@ -53,10 +63,28 @@ export class Game extends Engine {
             shark.events.on("exitviewport", (e) => this.sharkRight(e))
             this.add(shark)
         }
+
+        for (let i = 0; i < 4; i++) {
+            const mines = new Actor()
+            mines.graphics.use(Resources.Mines.toSprite())
+            mines.pos = new Vector(randomInRange(200, 1000), randomInRange(100, 400))
+            mines.vel = new Vector(0, randomInRange(10, 20))
+            mines.events.on("exitviewport", (e) => this.minesBottom(e))
+            this.add(mines)
+        }
     }
 
     fishLeft(e) {
+        const currentSpeed = Math.abs(e.target.vel.x);
+        const speedLimit = 1200;
+
         e.target.pos = new Vector(1400, randomInRange(0, 720))
+        if (currentSpeed < speedLimit) {
+            e.target.vel = new Vector(e.target.vel.x * 1.5, 0)
+        }
+        if (currentSpeed > speedLimit) {
+            e.target.vel = new Vector(e.target.vel.x * 0.7, 0)
+        }
     }
 
     bonesBottom(e) {
@@ -69,6 +97,10 @@ export class Game extends Engine {
     
     sharkRight(e) {
         e.target.pos = new Vector(-50, randomInRange(200, 650))
+    }
+
+    minesBottom(e) {
+        e.target.pos = new Vector(randomInRange(200, 1000), -30)
     }
 
 }
