@@ -28,7 +28,7 @@ export class Game extends Engine {
         this.add(background)
 
 
-        for (let i = 0; i < 300; i++) {
+        for (let i = 0; i < 100; i++) {
             const fish = new Actor()
             fish.graphics.use(Resources.Fish.toSprite())
             fish.pos = new Vector(randomInRange(700, 1280), randomInRange(0, 720))
@@ -76,14 +76,16 @@ export class Game extends Engine {
 
     fishLeft(e) {
         const currentSpeed = Math.abs(e.target.vel.x);
-        const speedLimit = 1200;
+        const speedLimit = 30000;
+
+        console.log(currentSpeed)
 
         e.target.pos = new Vector(1400, randomInRange(0, 720))
         if (currentSpeed < speedLimit) {
-            e.target.vel = new Vector(e.target.vel.x * 1.5, 0)
+            e.target.vel = new Vector(e.target.vel.x * 1.1, 0)
         }
         if (currentSpeed > speedLimit) {
-            e.target.vel = new Vector(e.target.vel.x * 0.7, 0)
+            e.target.vel = new Vector(e.target.vel.x * 0.1, 0)
         }
     }
 
@@ -105,3 +107,4 @@ export class Game extends Engine {
 
 }
 new Game()
+
