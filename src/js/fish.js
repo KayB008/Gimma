@@ -4,7 +4,7 @@ import { Resources } from "./resources.js"
 export class Fish extends Actor {
 
     constructor() {
-        super();
+        super()
         console.log("i am a fish")
     }
 
@@ -13,10 +13,6 @@ export class Fish extends Actor {
         this.pos = new Vector(randomInRange(700, 1280), randomInRange(0, 720))
         this.vel = new Vector(randomInRange(-200, -75), 0)
         this.events.on("exitviewport", (e) => this.fishLeft(e))
-    }
-
-    onPostUpdate() {
-        
     }
 
     fishLeft(e) {

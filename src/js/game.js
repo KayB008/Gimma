@@ -53,7 +53,7 @@ export class Game extends Engine {
             this.add(shark)
         }
 
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 8; i++) {
             const mines = new Mines()
             this.add(mines)
         }
