@@ -1,4 +1,4 @@
-import { Actor, Vector, randomInRange } from "excalibur"
+import { Actor, Rectangle, Vector, randomInRange, resetObsoleteCounter } from "excalibur"
 import { Resources } from "./resources.js"
 
 export class Bubbles extends Actor {
@@ -12,10 +12,12 @@ export class Bubbles extends Actor {
         this.graphics.use(Resources.Bubbles.toSprite())
         this.pos = new Vector(randomInRange(0, 1280), randomInRange(720, 800))
         this.vel = new Vector(0, randomInRange(-1090, -5))
-        this.events.on("exitviewport", (e) => this.bubblesTop(e))
     }
 
-    bubblesTop(e) {
-        e.target.pos = new Vector(randomInRange(0, 1280), 750)
+    onPostUpdate(engine, delta) {
+        if (this.pos.y < -Resources.Bubbles.height) {
+            this.pos = new Vector(randomInRange(0, 1280), 720 + Resources.Bubbles.height)
+        }
     }
+
 }

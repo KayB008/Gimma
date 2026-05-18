@@ -1,4 +1,4 @@
-import { Actor, Vector, randomInRange } from "excalibur"
+import { Actor, Vector, randomInRange, Keys } from "excalibur"
 import { Resources } from "./resources.js"
 
 export class Fish extends Actor {
@@ -9,23 +9,51 @@ export class Fish extends Actor {
     }
 
     onInitialize(engine) {
+        this.swimSpeed = 500
+
         this.graphics.use(Resources.Fish.toSprite())
-        this.pos = new Vector(randomInRange(700, 1280), randomInRange(0, 720))
-        this.vel = new Vector(randomInRange(-200, -75), 0)
-        this.events.on("exitviewport", (e) => this.fishLeft(e))
+        this.pos = new Vector(1200, randomInRange(0, 720))
     }
 
-    fishLeft(e) {
-            const currentSpeed = Math.abs(e.target.vel.x);
-            const speedLimit = 30000;
-    
-            e.target.pos = new Vector(1400, randomInRange(0, 720))
-            if (currentSpeed < speedLimit) {
-                e.target.vel = new Vector(e.target.vel.x * 1.1, 0)
-            }
-            if (currentSpeed > speedLimit) {
-                e.target.vel = new Vector(e.target.vel.x * 0.1, 0)
-            }
+
+    onPostUpdate(engine) {
+        if (this.pos.x < -Resources.Fish.width) {
+            this.pos = new Vector(1280 + Resources.Fish.width, this.pos.y)
         }
+        if (this.pos.x > 1280 + Resources.Fish.width) {
+            this.pos = new Vector(-Resources.Fish.width, this.pos.y)
+        }
+        if (this.pos.y > 720 + Resources.Fish.height) {
+            this.pos = new Vector(this.pos.x, -Resources.Fish.height)
+        }
+        if (this.pos.y < -Resources.Fish.height) {
+            this.pos = new Vector(this.pos.x, 720 + Resources.Fish.height)
+        }
+
+
+        //controls
+        let xspeed = 0
+        let yspeed = 0
+
+        if (engine.input.keyboard.isHeld(Keys.Left)) {
+            xspeed -= this.swimSpeed
+            this.scale.x = 1
+        }
+
+        if (engine.input.keyboard.isHeld(Keys.Right)) {
+            xspeed += this.swimSpeed
+            this.scale.x = -1
+        }
+
+        if (engine.input.keyboard.isHeld(Keys.Up)) {
+            yspeed -= this.swimSpeed
+        }
+
+        if (engine.input.keyboard.isHeld(Keys.Down)) {
+            yspeed += this.swimSpeed
+        }
+
+        this.vel = new Vector(xspeed, yspeed)
+    }
     
 }

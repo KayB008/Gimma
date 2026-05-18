@@ -12,12 +12,12 @@ export class Bones extends Actor {
         this.graphics.use(Resources.Bones.toSprite())
         this.pos = new Vector(randomInRange(100, 1200), randomInRange(0, 100))
         this.vel = new Vector(0, randomInRange(5, 10))
-        this.events.on("exitviewport", (e) => this.bonesBottom(e))
     }
 
-
-    bonesBottom(e) {
-        e.target.pos = new Vector(randomInRange(100, 1200), -30)
+    onPostUpdate(engine, delta) {
+        if (this.pos.y < -Resources.Bones.height) {
+            this.pos = new Vector(randomInRange(0, 1280), -Resources.Bones.height)
+        }
     }
     
 }

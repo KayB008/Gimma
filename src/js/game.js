@@ -24,16 +24,16 @@ export class Game extends Engine {
 
         console.log("start de game!")
 
-            const background = new Actor({
-            x: this.drawWidth / 2,
-            y: this.drawHeight / 2,
-            z: -1
+        const background = new Actor({
+        x: this.drawWidth / 2,
+        y: this.drawHeight / 2,
+        z: -1
         })
         background.graphics.use(Resources.Background.toSprite())
         this.add(background)
 
 
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < 1; i++) {
             const fish = new Fish()
             this.add(fish)
         }
