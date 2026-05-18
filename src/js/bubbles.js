@@ -1,5 +1,6 @@
 import { Actor, Rectangle, Vector, randomInRange, resetObsoleteCounter } from "excalibur"
 import { Resources } from "./resources.js"
+import { Map } from './map.js'
 
 export class Bubbles extends Actor {
 

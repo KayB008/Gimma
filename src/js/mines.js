@@ -1,10 +1,14 @@
 import { Actor, Vector, randomInRange } from "excalibur"
 import { Resources } from "./resources.js"
+import { Map } from './map.js'
 
 export class Mines extends Actor {
 
     constructor() {
-        super();
+        super({
+            width: Resources.Mines.width,
+            height: Resources.Mines.height
+        });
         console.log("i am a mine")
     }
 

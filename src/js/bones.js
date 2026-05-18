@@ -1,5 +1,6 @@
 import { Actor, Vector, randomInRange } from "excalibur"
 import { Resources } from "./resources.js"
+import { Map } from './map.js'
 
 export class Bones extends Actor {
 
@@ -10,7 +11,7 @@ export class Bones extends Actor {
 
     onInitialize(engine) {
         this.graphics.use(Resources.Bones.toSprite())
-        this.pos = new Vector(randomInRange(100, 1200), randomInRange(0, 100))
+        this.pos = new Vector(randomInRange(100, 1200), randomInRange(0, 600))
         this.vel = new Vector(0, randomInRange(5, 10))
     }
 
