@@ -20,12 +20,13 @@ export class Mines extends Actor {
 
         this.startY = this.pos.y
         this.time = 0
+        this.randomAmplitude = randomInRange(Math.abs(this.map.mapHeight)/2000, Math.abs(this.map.mapHeight)/500)
     }
 
     onPostUpdate(engine, delta) {
         this.time += delta / 1000
 
-        this.pos.y = this.startY + Math.sin(this.time * 2) * 20
+        this.pos.y = this.startY + Math.sin(this.time * this.randomAmplitude) * Math.abs(this.map.mapHeight)/100
     }
  
 }

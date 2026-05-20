@@ -16,9 +16,18 @@ export class Fish extends Actor {
 
     onInitialize(engine) {
         this.graphics.use(Resources.Fish.toSprite())
-        this.graphics.flipHorizontal = true
         this.pos = new Vector(randomInRange(0, (Math.abs(this.map.mapWidth) * 0.8)), randomInRange(0, this.map.mapHeight))
-        this.vel = new Vector(randomInRange(100, 300), 0)
+        this.fishSpeed = randomInRange(100, 300)
+
+        if (randomInRange(1, 10) <= 5) {
+            this.fishSpeed *= -1
+        }
+
+        this.vel = new Vector(this.fishSpeed, 0)
+
+        if (this.vel.x > 0) {
+            this.graphics.flipHorizontal = true
+        }
 
         this.startY = this.pos.y
         this.time = 0
@@ -29,6 +38,9 @@ export class Fish extends Actor {
     onPostUpdate(engine, delta) {
         if (this.pos.x > this.map.mapWidth + Resources.Fish.width) {
             this.pos = new Vector(-Resources.Fish.width, randomInRange(0, this.map.mapHeight))
+        }
+        if (this.pos.x < -Resources.Fish.width) {
+            this.pos = new Vector(this.map.mapWidth + Resources.Fish.width, randomInRange(0, this.map.mapHeight))
         }
 
         this.time += delta / 1000
