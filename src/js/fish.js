@@ -11,7 +11,6 @@ export class Fish extends Actor {
             width: Resources.Fish.width,
             height: Resources.Fish.height
         });
-        console.log("i am a Fish")
     }
 
     onInitialize(engine) {
@@ -32,7 +31,7 @@ export class Fish extends Actor {
         this.startY = this.pos.y
         this.time = 0
         this.wobbleSpeed = randomInRange(1, 5)
-        this.amplitude = randomInRange(25, 100)
+        this.amplitude = randomInRange(25, 150)
     }
 
     onPostUpdate(engine, delta) {

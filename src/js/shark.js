@@ -19,16 +19,19 @@ export class Shark extends Player {
     }
 
     onInitialize(engine) {
-        this.health = 3
+        this.health = 5
         this.score = 0
 
         this.graphics.use(Resources.Shark.toSprite())
         this.graphics.flipHorizontal = true
-        this.pos = new Vector(Math.abs(this.map.mapWidth)/2, Math.abs(this.map.mapHeight)/2)
+        this.pos = new Vector(Math.abs(this.map.mapWidth) / 2, Math.abs(this.map.mapHeight) / 2)
+        
+        this.startY = this.pos.y
+        this.time = 0
     }
 
 
-    onPostUpdate(engine) {
+    onPostUpdate(engine, delta) {
         if (this.pos.x <= Math.abs(Resources.Shark.width) / 2) {
             this.pos.x = Math.abs(Resources.Shark.width) / 2
         }
@@ -46,6 +49,10 @@ export class Shark extends Player {
         if (this.health <= 0) {
             this.kill()
         }
+
+        this.time += delta / 1000
+
+        this.pos.y = this.pos.y + Math.sin(this.time * 3) * 2
     }
 
     onCollisionStart(event, other) {
@@ -57,6 +64,7 @@ export class Shark extends Player {
 
         if (other.owner instanceof Mines) {
             this.health -= 1
+            this.scene.engine.healthLabel.text = `Health: ${this.health}/5`
             other.owner.kill()
         }
     }

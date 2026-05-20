@@ -26,7 +26,6 @@ export class Game extends Engine {
 
         this.scoreLabel = new Label({
             text: 'Score: 0',
-            pos: new Vector(50, 50),
             z: 10,
             font: new Font({
                 family: 'Arial',
@@ -37,9 +36,23 @@ export class Game extends Engine {
         })
         this.add(this.scoreLabel)
 
+        this.healthLabel = new Label({
+            text: 'Health: 5/5',
+            z: 10,
+            font: new Font({
+                family: 'Arial',
+                size: 24,
+                unit: FontUnit.Px,
+                color: Color.Black
+            })
+        })
+        this.add(this.healthLabel)
+
 
         this.map = new Map()
         this.add(this.map)
+
+        this.time = 0
 
 
         for (let i = 0; i < (Math.abs(this.map.mapWidth) / 100); i++) {
@@ -52,7 +65,7 @@ export class Game extends Engine {
             this.add(bubbles)
         }
 
-        for (let i = 0; i < (Math.abs(this.map.mapWidth) / 30); i++) {
+        for (let i = 0; i < (Math.abs(this.map.mapWidth) / 50); i++) {
             const fish = new Fish()
             this.add(fish)
         }
@@ -68,10 +81,25 @@ export class Game extends Engine {
         this.currentScene.camera.strategy.limitCameraBounds(new BoundingBox(0, 0, this.map.mapWidth, this.map.mapHeight))
     }
 
-    onPostUpdate() {
+    onPostUpdate(engine, delta) {
         const camPos = this.currentScene.camera.pos
         const topLeft = camPos.add(new Vector(-this.drawWidth / 2, -this.drawHeight / 2))
         this.scoreLabel.pos = topLeft.add(new Vector(50, 50))
+        const topRight = camPos.add(new Vector(-this.drawWidth / 2 + this.drawWidth - 250, -this.drawHeight / 2))
+        this.healthLabel.pos = topRight.add(new Vector(50, 50))
+
+
+        this.time += delta / 1000
+        
+        if (this.time > 20) {
+            this.time = 0
+
+            for (let i = 0; i < (Math.abs(this.map.mapWidth) / 50); i++) {
+                const fish = new Fish()
+                this.add(fish)
+                console.log("nieuwe vissen in de kom")
+            }
+        }
     }
 
 }
