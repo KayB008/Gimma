@@ -7,10 +7,19 @@ export class Map extends Actor {
         super({
             anchor: new Vector(0, 0)
         });
-        this.mapWidth = 2560
-        this.mapHeight = 1440
-        this.graphics.use(Resources.Background.toSprite())
+        this.mapWidth = 8000
+        this.mapHeight = 3000
     }
 
+    onInitialize(engine) {
+        // gebruik sprite om schaal te berekenen
+        const sprite = Resources.Background.toSprite()
+        this.graphics.use(sprite)
+
+        // bereken schaal op basis van sprite maat
+        const scaleX = this.mapWidth / sprite.width
+        const scaleY = this.mapHeight / sprite.height
+        this.scale = new Vector(scaleX, scaleY)
+    }
 
 }

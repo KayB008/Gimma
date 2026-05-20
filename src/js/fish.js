@@ -4,6 +4,8 @@ import { Map } from './map.js'
 
 export class Fish extends Actor {
 
+    map = new Map()
+
     constructor() {
         super({
             width: Resources.Fish.width,
@@ -15,8 +17,8 @@ export class Fish extends Actor {
     onInitialize(engine) {
         this.graphics.use(Resources.Fish.toSprite())
         this.graphics.flipHorizontal = true
-        this.pos = new Vector(randomInRange(0, 720), randomInRange(0, 720))
-        this.vel = new Vector(randomInRange(12, 120), 0)
+        this.pos = new Vector(randomInRange(0, (Math.abs(this.map.mapWidth) * 0.8)), randomInRange(0, this.map.mapHeight))
+        this.vel = new Vector(randomInRange(100, 300), 0)
 
         this.startY = this.pos.y
         this.time = 0
@@ -25,8 +27,8 @@ export class Fish extends Actor {
     }
 
     onPostUpdate(engine, delta) {
-        if (this.pos.x > 1280 + Resources.Fish.width) {
-            this.pos = new Vector(-Resources.Fish.width, randomInRange(0, 720))
+        if (this.pos.x > this.map.mapWidth + Resources.Fish.width) {
+            this.pos = new Vector(-Resources.Fish.width, randomInRange(0, this.map.mapHeight))
         }
 
         this.time += delta / 1000

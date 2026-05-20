@@ -3,9 +3,12 @@ import { Resources } from "./resources.js"
 import { Map } from './map.js'
 import { Fish } from "./fish.js"
 import { Mines } from './mines.js'
+import { Player } from './player.js'
 
 
-export class Shark extends Actor {
+export class Shark extends Player {
+
+    map = new Map()
 
     constructor() {
         super({
@@ -16,57 +19,29 @@ export class Shark extends Actor {
     }
 
     onInitialize(engine) {
-        this.swimSpeed = 500
         this.health = 3
         this.score = 0
 
         this.graphics.use(Resources.Shark.toSprite())
         this.graphics.flipHorizontal = true
-        // this.pos = new Vector(1200, randomInRange(0, 720))
-        this.pos = new Vector(600, 300)
+        this.pos = new Vector(Math.abs(this.map.mapWidth)/2, Math.abs(this.map.mapHeight)/2)
     }
 
 
     onPostUpdate(engine) {
-        // if (this.pos.x < -Math.abs(Resources.Shark.width) / 2) {
-        //     this.pos = new Vector(1280 + Math.abs(Resources.Shark.width) / 2, this.pos.y)
-        // }
-        // if (this.pos.x > 1280 + Math.abs(Resources.Shark.width) / 2) {
-        //     this.pos = new Vector(-Math.abs(Resources.Shark.width) / 2, this.pos.y)
-        // }
-        // if (this.pos.y > 720 + Math.abs(Resources.Shark.height) / 2) {
-        //     this.pos = new Vector(this.pos.x, -Math.abs(Resources.Shark.height) / 2)
-        // }
-        // if (this.pos.y < -Math.abs(Resources.Shark.height) / 2) {
-        //     this.pos = new Vector(this.pos.x, 720 + Math.abs(Resources.Shark.height) / 2)
-        // }
-
-
-        //controls
-        let xspeed = 0
-        let yspeed = 0
-
-        if (engine.input.keyboard.isHeld(Keys.Left)) {
-            xspeed -= this.swimSpeed
+        if (this.pos.x <= Math.abs(Resources.Shark.width) / 2) {
+            this.pos.x = Math.abs(Resources.Shark.width) / 2
         }
-
-        if (engine.input.keyboard.isHeld(Keys.Right)) {
-            xspeed += this.swimSpeed
+        if (this.pos.x >= this.map.mapWidth - Math.abs(Resources.Shark.width) / 2) {
+            this.pos.x = this.map.mapWidth - Math.abs(Resources.Shark.width) / 2
         }
-
-        if (engine.input.keyboard.isHeld(Keys.Up)) {
-            yspeed -= this.swimSpeed
+        if (this.pos.y >= this.map.mapHeight - Math.abs(Resources.Shark.height) / 2) {
+            this.pos.y = this.map.mapHeight - Math.abs(Resources.Shark.height) / 2
         }
-
-        if (engine.input.keyboard.isHeld(Keys.Down)) {
-            yspeed += this.swimSpeed
+        if (this.pos.y <= Math.abs(Resources.Shark.height) / 2) {
+            this.pos.y = Math.abs(Resources.Shark.height) / 2
         }
-
-        this.vel = new Vector(xspeed, yspeed)
-
-        if (xspeed !== 0) {
-            this.graphics.flipHorizontal = xspeed < 0
-        }
+        
 
         if (this.health <= 0) {
             this.kill()

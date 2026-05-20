@@ -4,6 +4,8 @@ import { Map } from './map.js'
 
 export class Mines extends Actor {
 
+    map = new Map()
+
     constructor() {
         super({
             width: Resources.Mines.width,
@@ -14,7 +16,7 @@ export class Mines extends Actor {
 
     onInitialize(engine) {
         this.graphics.use(Resources.Mines.toSprite())
-        this.pos = new Vector(randomInRange(200, 1000), randomInRange(100, 600))
+        this.pos = new Vector(randomInRange(0, this.map.mapWidth), randomInRange(0, this.map.mapHeight))
 
         this.startY = this.pos.y
         this.time = 0

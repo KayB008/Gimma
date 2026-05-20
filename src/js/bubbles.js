@@ -4,6 +4,9 @@ import { Map } from './map.js'
 
 export class Bubbles extends Actor {
 
+    map = new Map()
+
+
     constructor() {
         super();
         console.log("i am a bubble")
@@ -11,13 +14,13 @@ export class Bubbles extends Actor {
 
     onInitialize(engine) {
         this.graphics.use(Resources.Bubbles.toSprite())
-        this.pos = new Vector(randomInRange(0, 1280), randomInRange(720, 800))
+        this.pos = new Vector(randomInRange(0, this.map.mapWidth), randomInRange(this.map.mapHeight - 50, this.map.mapHeight))
         this.vel = new Vector(0, randomInRange(-1090, -5))
     }
 
     onPostUpdate(engine, delta) {
         if (this.pos.y < -Resources.Bubbles.height) {
-            this.pos = new Vector(randomInRange(0, 1280), 720 + Resources.Bubbles.height)
+            this.pos = new Vector(randomInRange(0, this.map.mapWidth), this.map.mapHeight + Resources.Bubbles.height)
         }
     }
 

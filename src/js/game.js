@@ -42,22 +42,22 @@ export class Game extends Engine {
         this.add(this.map)
 
 
-        for (let i = 0; i < 10; i++) {
+        for (let i = 0; i < (Math.abs(this.map.mapWidth) / 100); i++) {
             const bones = new Bones()
             this.add(bones)
         }
 
-        for (let i = 0; i < 100; i++) {
+        for (let i = 0; i < (Math.abs(this.map.mapWidth) / 30); i++) {
             const bubbles = new Bubbles()
             this.add(bubbles)
         }
 
-        for (let i = 0; i < 200; i++) {
+        for (let i = 0; i < (Math.abs(this.map.mapWidth) / 30); i++) {
             const fish = new Fish()
             this.add(fish)
         }
 
-        for (let i = 0; i < 6; i++) {
+        for (let i = 0; i < (Math.abs(this.map.mapWidth) / 100); i++) {
             const mines = new Mines()
             this.add(mines)
         }
@@ -66,6 +66,12 @@ export class Game extends Engine {
         this.add(shark)
         this.currentScene.camera.strategy.lockToActor(shark)
         this.currentScene.camera.strategy.limitCameraBounds(new BoundingBox(0, 0, this.map.mapWidth, this.map.mapHeight))
+    }
+
+    onPostUpdate() {
+        const camPos = this.currentScene.camera.pos
+        const topLeft = camPos.add(new Vector(-this.drawWidth / 2, -this.drawHeight / 2))
+        this.scoreLabel.pos = topLeft.add(new Vector(50, 50))
     }
 
 }
