@@ -1,7 +1,11 @@
-import { Actor, Vector, randomInRange, Keys } from "excalibur"
-import { Resources } from "./resources.js"
+import '../css/style.css'
+import { Actor, Engine, Vector, DisplayMode, randomInRange, Label, Font, FontUnit, Color, BoundingBox } from "excalibur"
+import { Resources, ResourceLoader } from './resources.js'
+import { Game } from './game.js'
 import { Map } from './map.js'
-import { Fish } from "./fish.js"
+import { Fish } from './fish.js'
+import { Bones } from './bones.js'
+import { Bubbles } from './bubbles.js'
 import { Mines } from './mines.js'
 import { Player } from './player.js'
 
@@ -48,6 +52,7 @@ export class Shark extends Player {
 
         if (this.health <= 0) {
             this.kill()
+            // this.scene.engine.stop()
         }
 
         this.time += delta / 1000
