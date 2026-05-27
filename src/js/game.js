@@ -24,6 +24,10 @@ export class Game extends Engine {
     startGame() {
         console.log("start de game!")
 
+        this.player1
+        this.player2
+        this.ui
+
         this.scoreLabel = new Label({
             text: 'Score: 0',
             z: 10,
@@ -53,6 +57,7 @@ export class Game extends Engine {
         this.add(this.map)
 
         this.time = 0
+        this.newFish = 0
 
 
         for (let i = 0; i < (Math.abs(this.map.mapWidth) / 100); i++) {
@@ -75,13 +80,22 @@ export class Game extends Engine {
             this.add(mines)
         }
 
-        const shark = new Shark()
-        this.add(shark)
-        this.currentScene.camera.strategy.lockToActor(shark)
+        // this.ui = new UI()
+        // this.add(this.ui)
+
+        this.player1 = new Shark(0, "player1")
+        this.add(this.player1)
+        this.player2 = new Shark(200, "player2")
+        this.add(this.player2)
+        this.currentScene.camera.strategy.lockToActor(this.player1)
         this.currentScene.camera.strategy.limitCameraBounds(new BoundingBox(0, 0, this.map.mapWidth, this.map.mapHeight))
     }
 
     onPostUpdate(engine, delta) {
+
+        this.time += delta / 1000
+        this.SecondsPast = this.time
+
         const camPos = this.currentScene.camera.pos
         const topLeft = camPos.add(new Vector(-this.drawWidth / 2, -this.drawHeight / 2))
         this.scoreLabel.pos = topLeft.add(new Vector(50, 50))
@@ -89,12 +103,11 @@ export class Game extends Engine {
         this.healthLabel.pos = topRight.add(new Vector(50, 50))
 
 
-        this.time += delta / 1000
+        this.newFish++
         
-        if (this.time > 20) {
-            this.time = 0
+        if (Math.abs(this.newFish) % 60 == 0) {
 
-            for (let i = 0; i < (Math.abs(this.map.mapWidth) / 50); i++) {
+            for (let i = 0; i < (Math.abs(this.map.mapWidth) / 4000); i++) {
                 const fish = new Fish()
                 this.add(fish)
                 console.log("nieuwe vissen in de kom")
@@ -104,4 +117,3 @@ export class Game extends Engine {
 
 }
 new Game()
-
