@@ -15,7 +15,10 @@ export class Fish extends Actor {
 
     onInitialize(engine) {
         this.graphics.use(Resources.Fish.toSprite())
-        this.pos = new Vector(randomInRange(0, (Math.abs(this.map.mapWidth) * 0.8)), randomInRange(0, this.map.mapHeight))
+        this.pos = new Vector(randomInRange(0, Math.abs(this.map.mapWidth)),
+                              randomInRange(0, this.map.mapHeight))
+        const distance = Vector.distance(this.scene.engine.player1.pos, this.pos)
+        console.log(this.scene.engine.player1.pos)
         this.fishSpeed = randomInRange(100, 300)
 
         if (randomInRange(1, 10) <= 5) {
@@ -31,8 +34,13 @@ export class Fish extends Actor {
         this.startY = this.pos.y
         this.time = 0
         this.wobbleSpeed = randomInRange(1, 5)
-        this.amplitude = randomInRange(25, 150)
+        this.amplitude = randomInRange(25, 75)
+
+        if (distance < 500) {
+            this.kill()
+        }
     }
+
 
     onPostUpdate(engine, delta) {
         if (this.pos.x > this.map.mapWidth + Resources.Fish.width) {

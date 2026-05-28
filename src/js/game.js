@@ -10,6 +10,9 @@ import { Mines } from './mines.js'
 
 export class Game extends Engine {
 
+    player1
+    ui
+
     constructor() {
         super({
             width: 1280,
@@ -25,7 +28,6 @@ export class Game extends Engine {
         console.log("start de game!")
 
         this.player1
-        this.player2
         this.ui
 
         this.scoreLabel = new Label({
@@ -59,15 +61,16 @@ export class Game extends Engine {
         this.time = 0
         this.newFish = 0
 
+        
+        this.player1 = new Shark(0, "player1")
+        this.add(this.player1)
+        this.currentScene.camera.strategy.lockToActor(this.player1)
+        this.currentScene.camera.strategy.limitCameraBounds(new BoundingBox(0, 0, this.map.mapWidth, this.map.mapHeight))
+    
 
         for (let i = 0; i < (Math.abs(this.map.mapWidth) / 100); i++) {
             const bones = new Bones()
             this.add(bones)
-        }
-
-        for (let i = 0; i < (Math.abs(this.map.mapWidth) / 30); i++) {
-            const bubbles = new Bubbles()
-            this.add(bubbles)
         }
 
         for (let i = 0; i < (Math.abs(this.map.mapWidth) / 50); i++) {
@@ -75,20 +78,10 @@ export class Game extends Engine {
             this.add(fish)
         }
 
-        for (let i = 0; i < (Math.abs(this.map.mapWidth) / 100); i++) {
-            const mines = new Mines()
-            this.add(mines)
-        }
-
-        // this.ui = new UI()
-        // this.add(this.ui)
-
-        this.player1 = new Shark(0, "player1")
-        this.add(this.player1)
-        this.player2 = new Shark(200, "player2")
-        this.add(this.player2)
-        this.currentScene.camera.strategy.lockToActor(this.player1)
-        this.currentScene.camera.strategy.limitCameraBounds(new BoundingBox(0, 0, this.map.mapWidth, this.map.mapHeight))
+        // for (let i = 0; i < (Math.abs(this.map.mapWidth) / 100); i++) {
+        //     const mines = new Mines()
+        //     this.add(mines)
+        // }
     }
 
     onPostUpdate(engine, delta) {
@@ -104,7 +97,7 @@ export class Game extends Engine {
 
 
         this.newFish++
-        
+
         if (Math.abs(this.newFish) % 60 == 0) {
 
             for (let i = 0; i < (Math.abs(this.map.mapWidth) / 4000); i++) {

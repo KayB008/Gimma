@@ -33,6 +33,7 @@ export class Shark extends Actor {
 
         this.startY = this.pos.y
         this.time = 0
+        this.shootTiming = 0
     }
 
     swimSpeed = 500
@@ -45,28 +46,16 @@ export class Shark extends Actor {
         if (engine.input.keyboard.isHeld(Keys.A) && this.playerNum === "player1") {
             xspeed -= this.swimSpeed
         }
-        if (engine.input.keyboard.isHeld(Keys.Left) && this.playerNum === "player2") {
-            xspeed -= this.swimSpeed
-        }
 
         if (engine.input.keyboard.isHeld(Keys.D) && this.playerNum === "player1") {
-            xspeed += this.swimSpeed
-        }
-        if (engine.input.keyboard.isHeld(Keys.Right) && this.playerNum === "player2") {
             xspeed += this.swimSpeed
         }
 
         if (engine.input.keyboard.isHeld(Keys.W) && this.playerNum === "player1") {
             yspeed -= this.swimSpeed
         }
-        if (engine.input.keyboard.isHeld(Keys.Up) && this.playerNum === "player2") {
-            yspeed -= this.swimSpeed
-        }
 
         if (engine.input.keyboard.isHeld(Keys.S) && this.playerNum === "player1") {
-            yspeed += this.swimSpeed
-        }
-        if (engine.input.keyboard.isHeld(Keys.Down) && this.playerNum === "player2") {
             yspeed += this.swimSpeed
         }
 
@@ -75,7 +64,6 @@ export class Shark extends Actor {
         if (xspeed !== 0) {
             this.graphics.flipHorizontal = xspeed < 0
         }
-
     }
 
     onPostUpdate(engine, delta) {
@@ -99,18 +87,31 @@ export class Shark extends Actor {
         }
 
         this.time += delta / 1000
+        this.SecondsPast = this.time
 
         this.pos.y = this.pos.y + Math.sin(this.time * 3) * 0.75
+
+
+        this.shootTiming++
+
+        if (Math.abs(this.shootTiming) % 30 == 0) {
+            this.shoot()
+        }
+    }
+
+    shoot() {
+        if (this.graphics.flipHorizontal) { 
+        let bubble = new Bubbles(this.pos.x, this.pos.y, -1)
+        this.scene.add(bubble)
+        }  
+        else {
+            let bubble = new Bubbles(this.pos.x, this.pos.y, 1)
+        this.scene.add(bubble)
+        }
     }
 
     onCollisionStart(event, other) {
         if (other.owner instanceof Fish) {
-            this.score += 1
-            this.scene.engine.scoreLabel.text = `Score: ${this.score}`
-            other.owner.kill()
-        }
-
-        if (other.owner instanceof Mines) {
             this.health -= 1
             this.scene.engine.healthLabel.text = `Health: ${this.health}/5`
             other.owner.kill()
