@@ -25,11 +25,20 @@ export class Bubbles extends Actor {
         this.graphics.use(Resources.Bubbles.toSprite())
         this.pos = new Vector(this.posX + this.scene.engine.player1.width / 2 * this.shootingSide, this.posY)
          
-        const maxDist = 500
-        const fishes = Array.from(this.scene.actors).filter(a => a instanceof Fish && a.pos.distance(this.pos) <= maxDist)
-        const target = fishes.length ? fishes.reduce((n, a) => n.pos.distance(this.pos) < a.pos.distance(this.pos) ? n : a) : null
-
+        const maxDist = 600
         const speed = 1500
+        
+        let target = null
+        let bestDist = Infinity
+        for (const actor of this.scene.actors) {
+            if (!(actor instanceof Fish)) continue
+            const d = actor.pos.distance(this.pos)
+            if (d <= maxDist && d < bestDist) {
+                bestDist = d
+                target = actor
+            }
+        }
+
         if (target) {
             const dir = target.pos.sub(this.pos).normalize()
             this.vel = new Vector(dir.x * speed, dir.y * speed)

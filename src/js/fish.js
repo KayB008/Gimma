@@ -16,29 +16,34 @@ export class Fish extends Actor {
     onInitialize(engine) {
         this.graphics.use(Resources.Fish.toSprite())
         this.pos = new Vector(randomInRange(0, Math.abs(this.map.mapWidth)),
-                              randomInRange(0, this.map.mapHeight))
+            randomInRange(0, this.map.mapHeight))
         const distance = Vector.distance(this.scene.engine.player1.pos, this.pos)
         console.log(this.scene.engine.player1.pos)
-        this.fishSpeed = randomInRange(100, 300)
+        this.fishSpeedX = randomInRange(100, 300)
+        this.fishSpeedY = randomInRange(10, 20)
 
         if (randomInRange(1, 10) <= 5) {
-            this.fishSpeed *= -1
+            this.fishSpeedX *= -1
+        }
+        if (randomInRange(1, 10) <= 5) {
+            this.fishSpeedY *= -1
         }
 
-        this.vel = new Vector(this.fishSpeed, 0)
+        this.vel = new Vector(this.fishSpeedX, this.fishSpeedY)
 
         if (this.vel.x > 0) {
             this.graphics.flipHorizontal = true
         }
 
-        this.startY = this.pos.y
         this.time = 0
         this.wobbleSpeed = randomInRange(1, 5)
-        this.amplitude = randomInRange(25, 75)
+        this.amplitude = randomInRange(2, 5)
 
         if (distance < 500) {
             this.kill()
         }
+
+        this.chaseSpeed = 200
     }
 
 
@@ -52,7 +57,17 @@ export class Fish extends Actor {
 
         this.time += delta / 1000
 
-        this.pos.y = this.startY + Math.sin(this.time * this.wobbleSpeed) * this.amplitude
+        this.pos.y = this.pos.y + Math.sin(this.time * this.wobbleSpeed) * this.amplitude
+
+
+        this.distance = Vector.distance(this.scene.engine.player1.pos, this.pos)
+        if (this.distance < 500) {
+            const dx = this.scene.engine.player1.pos.x - this.pos.x
+            const dy = this.scene.engine.player1.pos.y - this.pos.y
+            const d = Math.hypot(dx, dy)
+            this.vel.setTo((dx / d) * this.chaseSpeed, (dy / d) * this.chaseSpeed)
+            this.graphics.flipHorizontal = this.vel.x > 0
+        }
     }
 
 }
