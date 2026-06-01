@@ -90,7 +90,7 @@ export class Shark extends Actor {
 
         if (this.health <= 0) {
             this.kill()
-            // this.scene.engine.stop()
+            this.scene.engine.stop()
         }
 
         this.time += delta / 1000

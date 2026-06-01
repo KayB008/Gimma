@@ -77,9 +77,9 @@ export class Game extends Engine {
 
         this.newFish++
 
-        if (Math.abs(this.newFish) % 60 == 0) {
+        if (Math.abs(this.newFish) % 45 == 0) {
 
-            for (let i = 0; i < (Math.abs(this.map.mapWidth) / 2000); i++) {
+            for (let i = 0; i < (Math.abs(this.map.mapWidth) / 4000); i++) {
                 const fish = new Fish(this.fishHealth, this.fishChaseSpeed)
                 this.add(fish)
             }
