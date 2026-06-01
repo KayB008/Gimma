@@ -8,7 +8,6 @@ export class Bones extends Actor {
 
     constructor() {
         super();
-        console.log("i am a bone")
     }
 
     onInitialize(engine) {

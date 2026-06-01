@@ -9,53 +9,47 @@ export class Bubbles extends Actor {
     map = new Map()
 
 
-    constructor(x, y, side) {
+    constructor(x, y, side, health) {
         super({
             width: Resources.Bubbles.width,
             height: Resources.Bubbles.height
         });
-        console.log("i am a bubble")
 
         this.posX = x
         this.posY = y
         this.shootingSide = side
+        this.health = health
     }
 
     onInitialize(engine) {
+        this.bubbleHealth = this.health
         this.graphics.use(Resources.Bubbles.toSprite())
         this.pos = new Vector(this.posX + this.scene.engine.player1.width / 2 * this.shootingSide, this.posY)
          
-        const maxDist = 600
+        const maxDist = 800
         const speed = 1500
         
         let target = null
         let bestDist = Infinity
         for (const actor of this.scene.actors) {
             if (!(actor instanceof Fish)) continue
-            const d = actor.pos.distance(this.pos)
-            if (d <= maxDist && d < bestDist) {
-                bestDist = d
+            const distance = actor.pos.distance(this.pos)
+            if (distance <= maxDist && distance < bestDist) {
+                bestDist = distance
                 target = actor
             }
         }
 
         if (target) {
-            const dir = target.pos.sub(this.pos).normalize()
+            const dir = new Vector(target.pos.x - this.pos.x, target.pos.y - this.pos.y).normalize()
             this.vel = new Vector(dir.x * speed, dir.y * speed)
         } else {
             this.vel = new Vector(1000 * this.shootingSide, 0)
         }
     }
 
-    onPostUpdate(engine, delta) {
-
-    }
-
-    onCollisionStart(event, other) {
-        if (other.owner instanceof Fish) {
-            this.scene.engine.player1.score += 1
-            this.scene.engine.scoreLabel.text = `Score: ${this.scene.engine.player1.score}`
-            other.owner.kill()
+    onPostUpdate(engine) {
+        if (this.bubbleHealth <= 0) {
             this.kill()
         }
     }

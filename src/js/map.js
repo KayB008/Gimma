@@ -7,8 +7,8 @@ export class Map extends Actor {
         super({
             anchor: new Vector(0, 0)
         });
-        this.mapWidth = 8000
-        this.mapHeight = 3000
+        this.mapWidth = 10000
+        this.mapHeight = 5000
     }
 
     onInitialize(engine) {

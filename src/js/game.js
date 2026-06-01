@@ -7,6 +7,7 @@ import { Bones } from './bones.js'
 import { Bubbles } from './bubbles.js'
 import { Shark } from './shark.js'
 import { Mines } from './mines.js'
+import { UI } from './ui.js'
 
 export class Game extends Engine {
 
@@ -15,8 +16,8 @@ export class Game extends Engine {
 
     constructor() {
         super({
-            width: 1280,
-            height: 720,
+            width: 1280*1.5,
+            height: 720*1.5,
             maxFps: 60,
             displayMode: DisplayMode.FitScreen
         })
@@ -30,58 +31,35 @@ export class Game extends Engine {
         this.player1
         this.ui
 
-        this.scoreLabel = new Label({
-            text: 'Score: 0',
-            z: 10,
-            font: new Font({
-                family: 'Arial',
-                size: 24,
-                unit: FontUnit.Px,
-                color: Color.Black
-            })
-        })
-        this.add(this.scoreLabel)
-
-        this.healthLabel = new Label({
-            text: 'Health: 5/5',
-            z: 10,
-            font: new Font({
-                family: 'Arial',
-                size: 24,
-                unit: FontUnit.Px,
-                color: Color.Black
-            })
-        })
-        this.add(this.healthLabel)
-
-
         this.map = new Map()
         this.add(this.map)
 
-        this.time = 0
-        this.newFish = 0
+        this.ui = new UI()
+        this.add(this.ui)
 
-        
+        this.time = 0
+        this.lastThirtySeconds = 0
+        this.newFish = 0 
+        this.fishHealth = 1
+        this.fishChaseSpeed = 150
+
+
         this.player1 = new Shark(0, "player1")
         this.add(this.player1)
         this.currentScene.camera.strategy.lockToActor(this.player1)
         this.currentScene.camera.strategy.limitCameraBounds(new BoundingBox(0, 0, this.map.mapWidth, this.map.mapHeight))
-    
+
 
         for (let i = 0; i < (Math.abs(this.map.mapWidth) / 100); i++) {
             const bones = new Bones()
             this.add(bones)
         }
 
-        for (let i = 0; i < (Math.abs(this.map.mapWidth) / 50); i++) {
-            const fish = new Fish()
+        for (let i = 0; i < (Math.abs(this.map.mapWidth) / 1000); i++) {
+            const fish = new Fish(this.fishHealth, this.fishChaseSpeed)
             this.add(fish)
         }
 
-        // for (let i = 0; i < (Math.abs(this.map.mapWidth) / 100); i++) {
-        //     const mines = new Mines()
-        //     this.add(mines)
-        // }
     }
 
     onPostUpdate(engine, delta) {
@@ -89,21 +67,21 @@ export class Game extends Engine {
         this.time += delta / 1000
         this.SecondsPast = this.time
 
-        const camPos = this.currentScene.camera.pos
-        const topLeft = camPos.add(new Vector(-this.drawWidth / 2, -this.drawHeight / 2))
-        this.scoreLabel.pos = topLeft.add(new Vector(50, 50))
-        const topRight = camPos.add(new Vector(-this.drawWidth / 2 + this.drawWidth - 250, -this.drawHeight / 2))
-        this.healthLabel.pos = topRight.add(new Vector(50, 50))
+        this.time += delta / 1000
 
+        if (this.time > 0 && Math.round(this.time) % 60 == 0 && this.lastThirtySeconds !== Math.round(this.time)) {
+            this.fishHealth += 1
+            this.fishChaseSpeed += 5
+            this.lastThirtySeconds = Math.round(this.time)
+        }
 
         this.newFish++
 
         if (Math.abs(this.newFish) % 60 == 0) {
 
-            for (let i = 0; i < (Math.abs(this.map.mapWidth) / 4000); i++) {
-                const fish = new Fish()
+            for (let i = 0; i < (Math.abs(this.map.mapWidth) / 2000); i++) {
+                const fish = new Fish(this.fishHealth, this.fishChaseSpeed)
                 this.add(fish)
-                console.log("nieuwe vissen in de kom")
             }
         }
     }

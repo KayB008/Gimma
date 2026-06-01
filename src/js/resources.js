@@ -18,4 +18,6 @@ for (let res of Object.values(Resources)) {
     ResourceLoader.addResource(res)
 }
 
+ResourceLoader.suppressPlayButton = true
+
 export { Resources, ResourceLoader }
