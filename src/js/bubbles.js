@@ -24,7 +24,7 @@ export class Bubbles extends Actor {
     onInitialize(engine) {
         this.bubbleHealth = this.health
         this.graphics.use(Resources.Bubbles.toSprite())
-        this.pos = new Vector(this.posX + this.scene.engine.player1.width / 2 * this.shootingSide, this.posY)
+        this.pos = new Vector(this.posX + this.scene.player1.width / 2 * this.shootingSide, this.posY)
          
         const maxDist = 800
         const speed = 1500

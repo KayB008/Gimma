@@ -6,7 +6,6 @@ import { Map } from './map.js'
 import { Fish } from './fish.js'
 import { Bones } from './bones.js'
 import { Bubbles } from './bubbles.js'
-import { Mines } from './mines.js'
 
 
 export class Shark extends Actor {
@@ -105,7 +104,7 @@ export class Shark extends Actor {
         if (this.score >= this.nextSpeedScore) {
             this.shootSpeed *= 0.98
             console.log(`shootSpeed: ${60 / this.shootSpeed}`)
-            this.scene.engine.ui.upgradeLabel2.text = `ShootingSpeed: ${Math.round(60 / this.shootSpeed)} bullets per second`
+            this.scene.ui.upgradeLabel2.text = `ShootingSpeed: ${Math.round(60 / this.shootSpeed)} bullets per second`
             this.nextSpeedScore += 25
             this.lastScoreForSpeed = this.score
         }
@@ -113,7 +112,7 @@ export class Shark extends Actor {
         if (this.score >= this.nextDamageScore) {
             this.damage += 1
             console.log(`damage: ${this.damage}`)
-            this.scene.engine.ui.upgradeLabel1.text = `Damage: ${this.damage}`
+            this.scene.ui.upgradeLabel1.text = `Damage: ${this.damage}`
             this.nextDamageScore += 50
             this.lastScoreForDamage = this.score
         }
@@ -121,7 +120,7 @@ export class Shark extends Actor {
         if (this.score >= this.nextPiercingScore) {
             this.piercing += 1
             console.log(`piercing: ${this.piercing}`)
-            this.scene.engine.ui.upgradeLabel3.text = `Piercing: ${this.piercing}`
+            this.scene.ui.upgradeLabel3.text = `Piercing: ${this.piercing}`
             this.nextPiercingScore += 100
             this.lastScoreForPiercing = this.score
         }
@@ -149,10 +148,10 @@ export class Shark extends Actor {
     onCollisionStart(event, other) {
         if (other.owner instanceof Fish) {
             this.health -= 10
-            this.scene.engine.ui.healthbar.scale = new Vector(this.health / 100, 1)
-            this.scene.engine.ui.healthLabel.text = `Health: ${this.health}`
+            this.scene.ui.healthbar.scale = new Vector(this.health / 100, 1)
+            this.scene.ui.healthLabel.text = `Health: ${this.health}`
             this.score += 1
-            this.scene.engine.ui.scoreLabel.text = `Score: ${this.scene.engine.player1.score}`
+            this.scene.ui.scoreLabel.text = `Score: ${this.scene.player1.score}`
             other.owner.kill()
         }
     }
