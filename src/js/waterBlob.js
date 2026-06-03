@@ -1,11 +1,10 @@
 import '../css/style.css'
 import { Actor, Engine, Vector, DisplayMode, randomInRange, Label, Font, FontUnit, Color, BoundingBox, Keys } from "excalibur"
 import { Resources, ResourceLoader } from './resources.js'
-import { Game } from './game.js'
 import { Map } from './map.js'
 import { LavaCrawler } from './lavaCrawler.js'
-import { Bones } from './bones.js'
 import { Bubbles } from './bubbles.js'
+import { DamagaBoost } from './damageBoost.js'
 
 
 export class WaterBlob extends Actor {
@@ -134,10 +133,14 @@ export class WaterBlob extends Actor {
             this.shoot()
         }
 
-        if (this.xp >= (50 * 1.5 * this.lvl)) {
+        if (this.xp >= (1 * 1.5 * this.lvl)) {
             this.xp = 0
             this.lvl += 1
             this.scene.ui.XPbar.scale = new Vector(this.scene.player1.xp / (50 * 1.5 * this.lvl), 1)
+            this.scene.ui.lvlLabel.text = `Lvl: ${this.lvl}`
+            
+            let boost = new DamagaBoost()
+            this.scene.add(boost)
         }
     }
 

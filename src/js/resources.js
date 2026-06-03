@@ -6,7 +6,6 @@ const Resources = {
     StartBackground: new ImageSource('images/startBackground.png'),
     LavaCrawler: new ImageSource('images/lavaCrawler.png'),
     WaterBlob: new ImageSource('images/waterBlob.png'),
-    Bones: new ImageSource('images/bones.png'),
     Bubbles: new ImageSource('images/bubble.png'),
     HealthPack: new ImageSource('images/healthPack.png'),
     XP: new ImageSource('images/XP.png')

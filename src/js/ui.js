@@ -1,5 +1,4 @@
 import { Actor, ScreenElement, Vector, randomInRange, Color, Label, Font, FontUnit } from "excalibur"
-import { Resources } from "./resources.js"
 import { Map } from './map.js'
 
 export class UI extends ScreenElement {
