@@ -8,7 +8,8 @@ const Resources = {
     WaterBlob: new ImageSource('images/waterBlob.png'),
     Bones: new ImageSource('images/bones.png'),
     Bubbles: new ImageSource('images/bubble.png'),
-    Mines: new ImageSource('images/mine.png')
+    HealthPack: new ImageSource('images/healthPack.png'),
+    XP: new ImageSource('images/XP.png')
 }
 
 

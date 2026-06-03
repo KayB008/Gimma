@@ -26,7 +26,7 @@ export class Bubbles extends Actor {
         this.graphics.use(Resources.Bubbles.toSprite())
         this.pos = new Vector(this.posX, this.posY)
 
-        const maxDist = Infinity
+        const maxDist = 800
         const speed = 1500
 
         let target = null

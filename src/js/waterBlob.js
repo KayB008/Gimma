@@ -45,6 +45,9 @@ export class WaterBlob extends Actor {
         this.piercing = 1
         this.lastScoreForPiercing = 0
         this.nextPiercingScore = 100
+        this.pickupRange = 300
+        this.xp = 0
+        this.lvl = 1
     }
 
     swimSpeed = 500
@@ -96,8 +99,8 @@ export class WaterBlob extends Actor {
         this.time += delta / 1000
         this.SecondsPast = this.time
 
-        this.pos.y = this.pos.y + Math.sin(this.time * 3) * 0.5
-        
+        // this.pos.y = this.pos.y + Math.sin(this.time * 3) * 0.5
+
 
         if (this.score >= this.nextSpeedScore) {
             this.shootSpeed *= 0.98
@@ -124,11 +127,17 @@ export class WaterBlob extends Actor {
         }
 
         this.shootTimer += delta / 1000
-        const secondsPerShot = Math.max(1 / 60, this.shootSpeed / 60) // minimaal 1 frame (=1/60s)
+        const secondsPerShot = Math.max(1 / 60, this.shootSpeed / 60)
 
         if (this.shootTimer >= secondsPerShot) {
             this.shootTimer -= secondsPerShot
             this.shoot()
+        }
+
+        if (this.xp >= (50 * 1.5 * this.lvl)) {
+            this.xp = 0
+            this.lvl += 1
+            this.scene.ui.XPbar.scale = new Vector(this.scene.player1.xp / (50 * 1.5 * this.lvl), 1)
         }
     }
 
@@ -143,7 +152,6 @@ export class WaterBlob extends Actor {
             this.scene.ui.healthbar.scale = new Vector(this.health / 100, 1)
             this.scene.ui.healthLabel.text = `Health: ${this.health}`
             this.score += 1
-            this.scene.ui.scoreLabel.text = `Score: ${this.scene.player1.score}`
             other.owner.kill()
         }
     }

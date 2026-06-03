@@ -1,9 +1,10 @@
-import { Scene, BoundingBox, LockCameraToActorStrategy } from "excalibur"
+import { Scene, BoundingBox, LockCameraToActorStrategy, randomInRange } from "excalibur"
 import { Map } from './map.js'
 import { LavaCrawler } from './lavaCrawler.js'
 import { Bones } from './bones.js'
 import { WaterBlob } from './waterBlob.js'
 import { UI } from './ui.js'
+import { HealthPack } from "./healthPack.js"
 
 export class GameScene extends Scene {
 
@@ -14,11 +15,13 @@ export class GameScene extends Scene {
         this.ui = new UI()
         this.add(this.ui)
 
+
         this.time = 0
         this.lastThirtySeconds = 0
         this.newLavaCrawler = 0
         this.lavaCrawlerHealth = 1
-        this.lavaCrawlerChaseSpeed = 300
+        this.lavaCrawlerChaseSpeed = 150
+        this.newHealthPack = 0
 
         this.player1 = new WaterBlob(0, "player1")
         this.add(this.player1)
@@ -36,6 +39,7 @@ export class GameScene extends Scene {
             const lavaCrawler = new LavaCrawler(this.lavaCrawlerHealth, this.lavaCrawlerChaseSpeed)
             this.add(lavaCrawler)
         }
+
     }
 
     onPostUpdate(engine, delta) {
@@ -47,8 +51,16 @@ export class GameScene extends Scene {
             this.lastThirtySeconds = Math.round(this.time)
         }
 
-        this.newLavaCrawler++
+        this.newHealthPack++
 
+        if (Math.abs(this.newHealthPack) % 1800 == 0) {
+            for (let i = 0; i < (randomInRange(0, 2)); i++) {
+                const healthPack = new HealthPack()
+                this.add(healthPack)
+            }
+        }
+
+        this.newLavaCrawler++
 
         this.countLavaCrawlers()
 

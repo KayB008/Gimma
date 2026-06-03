@@ -2,6 +2,7 @@ import { Actor, Vector, randomInRange, Color, Timer } from "excalibur"
 import { Resources } from "./resources.js"
 import { Map } from './map.js'
 import { Bubbles } from './bubbles.js'
+import { XP } from './XP.js'
 
 export class LavaCrawler extends Actor {
 
@@ -57,7 +58,10 @@ export class LavaCrawler extends Actor {
 
         if (this.health <= 0) {
             this.scene.player1.score += 1
-            this.scene.ui.scoreLabel.text = `Score: ${this.scene.player1.score}`
+            for (let i = 0; i < 3; i++) {
+                let xp = new XP(this.pos.x, this.pos.y)
+                this.scene.add(xp)
+            }
             this.kill()
         }
 

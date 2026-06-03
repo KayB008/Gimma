@@ -14,6 +14,12 @@ export class UI extends ScreenElement {
         this.topMidX = 960
         this.topMidY = 10
 
+        this.backXPbar = new Actor({ x: this.topMidX + 500, y: this.topMidY + 5, z: 9, color: Color.LightGray, width: 400, height: 40, anchor: new Vector(0, 0) })
+        this.addChild(this.backXPbar)
+        this.XPbar = new Actor({ x: this.topMidX + 500, y: this.topMidY + 5, z: 10, color: Color.Yellow, width: 400, height: 40, anchor: new Vector(0, 0) })
+        this.addChild(this.XPbar)
+        this.XPbar.scale = new Vector(this.scene.player1.xp / (50 * 1.5 * this.scene.player1.lvl), 1)
+
         this.healthbar = new Actor({ x: this.topMidX - 300, y: this.topMidY, z: 10, color: Color.Green, width: 600, height: 50, anchor: new Vector(0, 0) })
         this.addChild(this.healthbar)
 
@@ -31,8 +37,8 @@ export class UI extends ScreenElement {
         })
         this.addChild(this.healthLabel)
 
-        this.scoreLabel = new Label({
-            text: 'Score: 0',
+        this.lvlLabel = new Label({
+            text: 'Lvl: 1',
             x: 10,
             y: 10,
             z: 10,
@@ -40,10 +46,10 @@ export class UI extends ScreenElement {
                 family: 'Arial',
                 size: 60,
                 unit: FontUnit.Px,
-                color: Color.Black
+                color: Color.White
             })
         })
-        this.addChild(this.scoreLabel)
+        this.addChild(this.lvlLabel)
 
         this.upgradeLabel1 = new Label({
             text: `Damage: 1`,
@@ -54,7 +60,7 @@ export class UI extends ScreenElement {
                 family: 'Arial',
                 size: 30,
                 unit: FontUnit.Px,
-                color: Color.Black
+                color: Color.White
             })
         })
         this.addChild(this.upgradeLabel1)
@@ -68,7 +74,7 @@ export class UI extends ScreenElement {
                 family: 'Arial',
                 size: 30,
                 unit: FontUnit.Px,
-                color: Color.Black
+                color: Color.White
             })
         })
         this.addChild(this.upgradeLabel2)
@@ -82,7 +88,7 @@ export class UI extends ScreenElement {
                 family: 'Arial',
                 size: 30,
                 unit: FontUnit.Px,
-                color: Color.Black
+                color: Color.White
             })
         })
         this.addChild(this.upgradeLabel3)
