@@ -35,12 +35,16 @@ export class Shark extends Actor {
         this.startY = this.pos.y
         this.time = 0
         this.shootTiming = 0
+        this.shootTimer = 0
         this.shootSpeed = 30
         this.lastScoreForSpeed = 0
+        this.nextSpeedScore = 25
         this.damage = 1
         this.lastScoreForDamage = 0
+        this.nextDamageScore = 50
         this.piercing = 1
         this.lastScoreForPiercing = 0
+        this.nextPiercingScore = 100
     }
 
     swimSpeed = 500
@@ -98,28 +102,35 @@ export class Shark extends Actor {
 
         this.pos.y = this.pos.y + Math.sin(this.time * 3) * 0.5
 
-        if (this.score > 0 && this.score % 25 == 0 && this.lastScoreForSpeed !== this.score) {
-            this.shootSpeed *= 0.99
-            console.log(`shootSpeed: ${this.shootSpeed}`)
+        if (this.score >= this.nextSpeedScore) {
+            this.shootSpeed *= 0.98
+            console.log(`shootSpeed: ${60 / this.shootSpeed}`)
+            this.scene.engine.ui.upgradeLabel2.text = `ShootingSpeed: ${Math.round(60 / this.shootSpeed)} bullets per second`
+            this.nextSpeedScore += 25
             this.lastScoreForSpeed = this.score
         }
 
-        if (this.score > 0 && this.score % 50 == 0 && this.lastScoreForDamage !== this.score) {
+        if (this.score >= this.nextDamageScore) {
             this.damage += 1
             console.log(`damage: ${this.damage}`)
+            this.scene.engine.ui.upgradeLabel1.text = `Damage: ${this.damage}`
+            this.nextDamageScore += 50
             this.lastScoreForDamage = this.score
         }
 
-        if (this.score > 0 && this.score % 100 == 0 && this.lastScoreForPiercing !== this.score) {
+        if (this.score >= this.nextPiercingScore) {
             this.piercing += 1
             console.log(`piercing: ${this.piercing}`)
+            this.scene.engine.ui.upgradeLabel3.text = `Piercing: ${this.piercing}`
+            this.nextPiercingScore += 100
             this.lastScoreForPiercing = this.score
         }
 
-        this.shootTiming++
-
-        const sSpeed = Math.max(1, Math.round(this.shootSpeed))
-        if (this.shootTiming % sSpeed == 0) {
+        this.shootTimer += delta / 1000
+        const secondsPerShot = Math.max(1 / 60, this.shootSpeed / 60) // minimaal 1 frame (=1/60s)
+        
+        if (this.shootTimer >= secondsPerShot) {
+            this.shootTimer -= secondsPerShot
             this.shoot()
         }
     }

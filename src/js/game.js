@@ -11,9 +11,6 @@ import { UI } from './ui.js'
 
 export class Game extends Engine {
 
-    player1
-    ui
-
     constructor() {
         super({
             width: 1280*1.5,
@@ -69,8 +66,9 @@ export class Game extends Engine {
 
         this.time += delta / 1000
 
-        if (this.time > 0 && Math.round(this.time) % 60 == 0 && this.lastThirtySeconds !== Math.round(this.time)) {
-            this.fishHealth += 1
+        if (this.time > 0 && Math.round(this.time) % 90 == 0 && this.lastThirtySeconds !== Math.round(this.time)) {
+            this.fishHealth *= 2
+            console.log(this.fishHealth)
             this.fishChaseSpeed += 5
             this.lastThirtySeconds = Math.round(this.time)
         }

@@ -44,5 +44,47 @@ export class UI extends ScreenElement {
             })
         })
         this.addChild(this.scoreLabel)
+
+        this.upgradeLabel1 = new Label({
+            text: `Damage: 1`,
+            x: 10,
+            y: 70,
+            z: 10,
+            font: new Font({
+                family: 'Arial',
+                size: 30,
+                unit: FontUnit.Px,
+                color: Color.Black
+            })
+        })
+        this.addChild(this.upgradeLabel1)
+
+        this.upgradeLabel2 = new Label({
+            text: `ShootingSpeed: 2 bullets per second`,
+            x: 10,
+            y: 110,
+            z: 10,
+            font: new Font({
+                family: 'Arial',
+                size: 30,
+                unit: FontUnit.Px,
+                color: Color.Black
+            })
+        })
+        this.addChild(this.upgradeLabel2)
+
+        this.upgradeLabel3 = new Label({
+            text: `Piercing: 1`,
+            x: 10,
+            y: 150,
+            z: 10,
+            font: new Font({
+                family: 'Arial',
+                size: 30,
+                unit: FontUnit.Px,
+                color: Color.Black
+            })
+        })
+        this.addChild(this.upgradeLabel3)
     }
 }
