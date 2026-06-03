@@ -133,7 +133,7 @@ export class WaterBlob extends Actor {
             this.shoot()
         }
 
-        if (this.xp >= (1 * 1.5 * this.lvl)) {
+        if (this.xp >= (50 * 1.5 * this.lvl)) {
             this.xp = 0
             this.lvl += 1
             this.scene.ui.XPbar.scale = new Vector(this.scene.player1.xp / (50 * 1.5 * this.lvl), 1)
