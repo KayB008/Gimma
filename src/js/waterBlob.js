@@ -3,32 +3,33 @@ import { Actor, Engine, Vector, DisplayMode, randomInRange, Label, Font, FontUni
 import { Resources, ResourceLoader } from './resources.js'
 import { Game } from './game.js'
 import { Map } from './map.js'
-import { Fish } from './fish.js'
+import { LavaCrawler } from './lavaCrawler.js'
 import { Bones } from './bones.js'
 import { Bubbles } from './bubbles.js'
 
 
-export class Shark extends Actor {
+export class WaterBlob extends Actor {
 
     map = new Map()
 
     constructor(myPosX, player) {
         super({
-            width: Resources.Shark.width,
-            height: Resources.Shark.height
+            width: Resources.WaterBlob.width,
+            height: Resources.WaterBlob.height
         })
-        console.log("i am a Shark")
+        console.log("i am a WaterBlob")
         this.myPosX = myPosX
         this.playerNum = player
     }
 
     onInitialize(engine) {
+        this.scale = new Vector(0.25, 0.25)
+
         this.health = 100
 
         this.score = 0
 
-        this.graphics.use(Resources.Shark.toSprite())
-        this.graphics.flipHorizontal = true
+        this.graphics.use(Resources.WaterBlob.toSprite())
         this.pos = new Vector((Math.abs(this.map.mapWidth) / 2) + this.myPosX, Math.abs(this.map.mapHeight) / 2)
 
         this.startY = this.pos.y
@@ -70,24 +71,20 @@ export class Shark extends Actor {
         }
 
         this.vel = new Vector(xspeed, yspeed)
-
-        if (xspeed !== 0) {
-            this.graphics.flipHorizontal = xspeed < 0
-        }
     }
 
     onPostUpdate(engine, delta) {
-        if (this.pos.x <= Math.abs(Resources.Shark.width) / 2) {
-            this.pos.x = Math.abs(Resources.Shark.width) / 2
+        if (this.pos.x <= Math.abs(Resources.WaterBlob.width) / 8) {
+            this.pos.x = Math.abs(Resources.WaterBlob.width) / 8
         }
-        if (this.pos.x >= this.map.mapWidth - Math.abs(Resources.Shark.width) / 2) {
-            this.pos.x = this.map.mapWidth - Math.abs(Resources.Shark.width) / 2
+        if (this.pos.x >= this.map.mapWidth - Math.abs(Resources.WaterBlob.width) / 8) {
+            this.pos.x = this.map.mapWidth - Math.abs(Resources.WaterBlob.width) / 8
         }
-        if (this.pos.y >= this.map.mapHeight - Math.abs(Resources.Shark.height) / 2) {
-            this.pos.y = this.map.mapHeight - Math.abs(Resources.Shark.height) / 2
+        if (this.pos.y >= this.map.mapHeight - Math.abs(Resources.WaterBlob.height) / 8) {
+            this.pos.y = this.map.mapHeight - Math.abs(Resources.WaterBlob.height) / 8
         }
-        if (this.pos.y <= Math.abs(Resources.Shark.height) / 2) {
-            this.pos.y = Math.abs(Resources.Shark.height) / 2
+        if (this.pos.y <= Math.abs(Resources.WaterBlob.height) / 8) {
+            this.pos.y = Math.abs(Resources.WaterBlob.height) / 8
         }
 
 
@@ -100,6 +97,7 @@ export class Shark extends Actor {
         this.SecondsPast = this.time
 
         this.pos.y = this.pos.y + Math.sin(this.time * 3) * 0.5
+        
 
         if (this.score >= this.nextSpeedScore) {
             this.shootSpeed *= 0.98
@@ -127,7 +125,7 @@ export class Shark extends Actor {
 
         this.shootTimer += delta / 1000
         const secondsPerShot = Math.max(1 / 60, this.shootSpeed / 60) // minimaal 1 frame (=1/60s)
-        
+
         if (this.shootTimer >= secondsPerShot) {
             this.shootTimer -= secondsPerShot
             this.shoot()
@@ -135,18 +133,12 @@ export class Shark extends Actor {
     }
 
     shoot() {
-        if (this.graphics.flipHorizontal) {
-            let bubble = new Bubbles(this.pos.x, this.pos.y, -1, this.piercing)
-            this.scene.add(bubble)
-        }
-        else {
-            let bubble = new Bubbles(this.pos.x, this.pos.y, 1, this.piercing)
-            this.scene.add(bubble)
-        }
+        let bubble = new Bubbles(this.pos.x, this.pos.y, this.piercing)
+        this.scene.add(bubble)
     }
 
     onCollisionStart(event, other) {
-        if (other.owner instanceof Fish) {
+        if (other.owner instanceof LavaCrawler) {
             this.health -= 10
             this.scene.ui.healthbar.scale = new Vector(this.health / 100, 1)
             this.scene.ui.healthLabel.text = `Health: ${this.health}`

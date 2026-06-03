@@ -3,28 +3,29 @@ import { Resources } from "./resources.js"
 import { Map } from './map.js'
 import { Bubbles } from './bubbles.js'
 
-export class Fish extends Actor {
+export class LavaCrawler extends Actor {
 
     map = new Map()
 
     constructor(h, c) {
         super({
-            width: Resources.Fish.width,
-            height: Resources.Fish.height
+            width: Resources.LavaCrawler.width,
+            height: Resources.LavaCrawler.height
         });
         this.startHealth = h
         this.startChaseSpeed = c
     }
 
     onInitialize(engine) {
+        this.scale = new Vector(0.15, 0.15)
 
         this.chaseSpeed = this.startChaseSpeed
         this.health = this.startHealth
         this.lastThirtySeconds = 0
         this.healthPre = this.health
-        this.isFlashing = false
 
-        this.graphics.use(Resources.Fish.toSprite())
+
+        this.graphics.use(Resources.LavaCrawler.toSprite())
         this.pos = new Vector(randomInRange(0, Math.abs(this.map.mapWidth)),
             randomInRange(0, this.map.mapHeight))
         const distance = this.scene.player1.pos.distance(this.pos)
@@ -37,7 +38,7 @@ export class Fish extends Actor {
 
         this.time = 0
         this.wobbleSpeed = randomInRange(1, 5)
-        this.amplitude = randomInRange(2, 5)
+        this.amplitude = randomInRange(2, 4)
 
         if (distance < 500) {
             this.kill()
@@ -46,18 +47,12 @@ export class Fish extends Actor {
 
 
     onPostUpdate(engine, delta) {
-        if (this.pos.x > this.map.mapWidth + Resources.Fish.width) {
-            this.pos = new Vector(-Resources.Fish.width, randomInRange(0, this.map.mapHeight))
-        }
-        if (this.pos.x < -Resources.Fish.width) {
-            this.pos = new Vector(this.map.mapWidth + Resources.Fish.width, randomInRange(0, this.map.mapHeight))
-        }
-
         this.time += delta / 1000
 
 
         if (this.health < this.healthPre) {
-            this.hit()
+            this.actions.blink(100, 100, 2)
+            this.healthPre = this.health
         }
 
         if (this.health <= 0) {
@@ -68,13 +63,7 @@ export class Fish extends Actor {
 
         this.pos.y = this.pos.y + Math.sin(this.time * this.wobbleSpeed) * this.amplitude
 
-
-        this.distance = Vector.distance(this.scene.player1.pos, this.pos)
-
-        const dx = this.scene.player1.pos.x - this.pos.x
-        const dy = this.scene.player1.pos.y - this.pos.y
-        const d = Math.hypot(dx, dy)
-        this.vel.setTo((dx / d) * this.chaseSpeed, (dy / d) * this.chaseSpeed)
+        this.actions.meet(this.scene.player1, this.chaseSpeed)
         this.graphics.flipHorizontal = this.vel.x > 0
 
     }
@@ -84,18 +73,6 @@ export class Fish extends Actor {
             this.health -= this.scene.player1.damage
             other.owner.bubbleHealth -= 1
         }
-    }
-
-    hit() {
-        if (this.isFlashing) return
-        this.isFlashing = true
-        this.graphics.tint = Color.Red
-
-        // Na 200ms terug naar normale kleur
-        this.scene.engine.clock.schedule(() => {
-            this.graphics.tint = Color.White
-            this.isFlashing = false
-        }, 200);
     }
 
 }

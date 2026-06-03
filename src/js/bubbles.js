@@ -2,14 +2,14 @@ import { Actor, Rectangle, Vector, randomInRange, resetObsoleteCounter } from "e
 import { Resources } from "./resources.js"
 import { Game } from './game.js'
 import { Map } from './map.js'
-import { Fish } from './fish.js'
+import { LavaCrawler } from './lavaCrawler.js'
 
 export class Bubbles extends Actor {
 
     map = new Map()
 
 
-    constructor(x, y, side, health) {
+    constructor(x, y, health) {
         super({
             width: Resources.Bubbles.width,
             height: Resources.Bubbles.height
@@ -17,22 +17,22 @@ export class Bubbles extends Actor {
 
         this.posX = x
         this.posY = y
-        this.shootingSide = side
         this.health = health
     }
 
     onInitialize(engine) {
+        this.scale = new Vector(0.15, 0.15)
         this.bubbleHealth = this.health
         this.graphics.use(Resources.Bubbles.toSprite())
-        this.pos = new Vector(this.posX + this.scene.player1.width / 2 * this.shootingSide, this.posY)
-         
-        const maxDist = 800
+        this.pos = new Vector(this.posX, this.posY)
+
+        const maxDist = Infinity
         const speed = 1500
-        
+
         let target = null
         let bestDist = Infinity
         for (const actor of this.scene.actors) {
-            if (!(actor instanceof Fish)) continue
+            if (!(actor instanceof LavaCrawler)) continue
             const distance = actor.pos.distance(this.pos)
             if (distance <= maxDist && distance < bestDist) {
                 bestDist = distance
@@ -44,7 +44,7 @@ export class Bubbles extends Actor {
             const dir = new Vector(target.pos.x - this.pos.x, target.pos.y - this.pos.y).normalize()
             this.vel = new Vector(dir.x * speed, dir.y * speed)
         } else {
-            this.vel = new Vector(1000 * this.shootingSide, 0)
+            this.vel = new Vector(1000, 0)
         }
     }
 

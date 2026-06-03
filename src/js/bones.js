@@ -11,9 +11,10 @@ export class Bones extends Actor {
     }
 
     onInitialize(engine) {
+        this.scale = new Vector(0.2, 0.2)
         this.graphics.use(Resources.Bones.toSprite())
         this.pos = new Vector(randomInRange(0, this.map.mapWidth), randomInRange(0, this.map.mapHeight))
-        this.vel = new Vector(0, randomInRange(10, 20))
+        this.vel = new Vector(0, randomInRange(5, 10))
     }
 
     onPostUpdate(engine, delta) {
