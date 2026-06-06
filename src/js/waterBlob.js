@@ -128,10 +128,10 @@ export class WaterBlob extends Actor {
         this.healTimer += delta / 1000
         const secondsPerHeal = 20
 
-        if (this.healTimer >= secondsPerHeal) {
+        if (this.healTimer >= secondsPerHeal && this.health < 100) {
             this.healTimer -= secondsPerHeal
             this.health += this.healthRegen
-            this.scene.ui.healthbar.scale = new Vector(this.scene.player1.health / 100, 1)
+            this.scene.ui.healthbar.scale = new Vector(this.health / 100, 1)
             this.scene.ui.healthLabel.text = `Health: ${this.scene.player1.health}`
         }
 

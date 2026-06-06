@@ -32,6 +32,9 @@ export class HealthPack extends Actor {
             this.kill()
             if (this.scene.player1.health < 100) {
                 other.owner.health += 10
+                if (this.scene.player1.health > 100) {
+                    this.scene.player1.health = 100
+                }
                 this.scene.ui.healthbar.scale = new Vector(this.scene.player1.health / 100, 1)
                 this.scene.ui.healthLabel.text = `Health: ${this.scene.player1.health}`
             }
