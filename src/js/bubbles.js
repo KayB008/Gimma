@@ -28,6 +28,8 @@ export class Bubbles extends Actor {
 
         const maxDist = 800
         const speed = 1500
+        let speedX = speed
+        let speedY = speed
 
         let target = null
         let bestDist = Infinity
@@ -44,7 +46,15 @@ export class Bubbles extends Actor {
             const dir = new Vector(target.pos.x - this.pos.x, target.pos.y - this.pos.y).normalize()
             this.vel = new Vector(dir.x * speed, dir.y * speed)
         } else {
-            this.vel = new Vector(1000, 0)
+            this.wereToX = randomInRange(1, 100)
+            if (this.wereToX <= 50) {
+                speedX *= -1
+            }
+            this.wereToY = randomInRange(1, 100)
+            if (this.wereToY <= 50) {
+                speedY *= -1
+            }
+            this.vel = new Vector(speedX, speedY)
         }
     }
 

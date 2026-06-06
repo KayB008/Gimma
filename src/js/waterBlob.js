@@ -4,7 +4,7 @@ import { Resources, ResourceLoader } from './resources.js'
 import { Map } from './map.js'
 import { LavaCrawler } from './lavaCrawler.js'
 import { Bubbles } from './bubbles.js'
-import { DamagaBoost } from './damageBoost.js'
+import { LevelUpReward } from './levelUpReward.js'
 
 
 export class WaterBlob extends Actor {
@@ -35,7 +35,7 @@ export class WaterBlob extends Actor {
         this.time = 0
         this.shootTiming = 0
         this.shootTimer = 0
-        this.shootSpeed = 30
+        this.shootSpeed = 2
         this.lastScoreForSpeed = 0
         this.nextSpeedScore = 25
         this.damage = 1
@@ -49,7 +49,7 @@ export class WaterBlob extends Actor {
         this.lvl = 1
     }
 
-    swimSpeed = 500
+    movementSpeed = 500
 
     onPreUpdate(engine) {
         //controls
@@ -57,19 +57,19 @@ export class WaterBlob extends Actor {
         let yspeed = 0
 
         if (engine.input.keyboard.isHeld(Keys.A) && this.playerNum === "player1") {
-            xspeed -= this.swimSpeed
+            xspeed -= this.movementSpeed
         }
 
         if (engine.input.keyboard.isHeld(Keys.D) && this.playerNum === "player1") {
-            xspeed += this.swimSpeed
+            xspeed += this.movementSpeed
         }
 
         if (engine.input.keyboard.isHeld(Keys.W) && this.playerNum === "player1") {
-            yspeed -= this.swimSpeed
+            yspeed -= this.movementSpeed
         }
 
         if (engine.input.keyboard.isHeld(Keys.S) && this.playerNum === "player1") {
-            yspeed += this.swimSpeed
+            yspeed += this.movementSpeed
         }
 
         this.vel = new Vector(xspeed, yspeed)
@@ -98,35 +98,10 @@ export class WaterBlob extends Actor {
         this.time += delta / 1000
         this.SecondsPast = this.time
 
-        // this.pos.y = this.pos.y + Math.sin(this.time * 3) * 0.5
-
-
-        if (this.score >= this.nextSpeedScore) {
-            this.shootSpeed *= 0.98
-            console.log(`shootSpeed: ${60 / this.shootSpeed}`)
-            this.scene.ui.upgradeLabel2.text = `ShootingSpeed: ${Math.round(60 / this.shootSpeed)} bullets per second`
-            this.nextSpeedScore += 25
-            this.lastScoreForSpeed = this.score
-        }
-
-        if (this.score >= this.nextDamageScore) {
-            this.damage += 1
-            console.log(`damage: ${this.damage}`)
-            this.scene.ui.upgradeLabel1.text = `Damage: ${this.damage}`
-            this.nextDamageScore += 50
-            this.lastScoreForDamage = this.score
-        }
-
-        if (this.score >= this.nextPiercingScore) {
-            this.piercing += 1
-            console.log(`piercing: ${this.piercing}`)
-            this.scene.ui.upgradeLabel3.text = `Piercing: ${this.piercing}`
-            this.nextPiercingScore += 100
-            this.lastScoreForPiercing = this.score
-        }
+        this.pos.y = this.pos.y + Math.sin(this.time * 3) * 0.5
 
         this.shootTimer += delta / 1000
-        const secondsPerShot = Math.max(1 / 60, this.shootSpeed / 60)
+        const secondsPerShot = 1 / this.shootSpeed
 
         if (this.shootTimer >= secondsPerShot) {
             this.shootTimer -= secondsPerShot
@@ -138,9 +113,13 @@ export class WaterBlob extends Actor {
             this.lvl += 1
             this.scene.ui.XPbar.scale = new Vector(this.scene.player1.xp / (50 * 1.5 * this.lvl), 1)
             this.scene.ui.lvlLabel.text = `Lvl: ${this.lvl}`
-            
-            let boost = new DamagaBoost()
-            this.scene.add(boost)
+            if (this.levelUpBoost) {
+                this.levelUpBoost.card1.kill()
+                this.levelUpBoost.card2.kill()
+                this.levelUpBoost.card3.kill()
+            }
+            this.levelUpBoost = new LevelUpReward(this.pos.x, this.pos.y)
+            this.scene.add(this.levelUpBoost)
         }
     }
 
@@ -155,6 +134,9 @@ export class WaterBlob extends Actor {
             this.scene.ui.healthbar.scale = new Vector(this.health / 100, 1)
             this.scene.ui.healthLabel.text = `Health: ${this.health}`
             this.score += 1
+            other.owner.kill()
+        }
+        if (other.owner instanceof LevelUpReward) {
             other.owner.kill()
         }
     }

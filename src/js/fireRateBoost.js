@@ -2,13 +2,14 @@ import { Actor, ScreenElement, Vector, randomInRange, Color, Label, Font, FontUn
 import { Resources } from "./resources.js"
 import { Map } from './map.js'
 import { WaterBlob } from "./waterBlob.js"
+import { LevelUpReward } from "./levelUpReward.js"
 
-export class DamageBoost extends Actor {
+export class FireRateBoost extends Actor {
 
     constructor(x, y) {
         super({
-            width: Resources.DamageBoost.width,
-            height: Resources.DamageBoost.height
+            width: Resources.FireRateBoost.width,
+            height: Resources.FireRateBoost.height
         })
         this.X = x
         this.Y = y
@@ -16,18 +17,17 @@ export class DamageBoost extends Actor {
 
     onInitialize(engine) {
         this.scale = new Vector(0.2, 0.2)
-        this.graphics.use(Resources.DamageBoost.toSprite())
+        this.graphics.use(Resources.FireRateBoost.toSprite())
         this.pos = new Vector(this.X, this.Y)
     }
 
     onCollisionStart(event, other) {
         if (other.owner instanceof WaterBlob) {
-            this.scene.player1.damage *= 2
-            this.scene.ui.upgradeLabel1.text = `Damage: ${this.scene.player1.damage}`
+            this.scene.player1.shootSpeed *= 1.2
+            this.scene.ui.upgradeLabel2.text = `ShootSpeed: ${Math.round(this.scene.player1.shootSpeed)} shots per second`
             this.scene.player1.levelUpBoost.card1.kill()
             this.scene.player1.levelUpBoost.card2.kill()
             this.scene.player1.levelUpBoost.card3.kill()
         }
     }
-
 }

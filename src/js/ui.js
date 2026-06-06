@@ -79,7 +79,7 @@ export class UI extends ScreenElement {
         this.addChild(this.upgradeLabel2)
 
         this.upgradeLabel3 = new Label({
-            text: `Piercing: 1`,
+            text: `MovementSpeed: ${this.scene.player1.movementSpeed}`,
             x: 10,
             y: 150,
             z: 10,
