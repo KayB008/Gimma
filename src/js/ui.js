@@ -79,7 +79,7 @@ export class UI extends ScreenElement {
         this.addChild(this.upgradeLabel2)
 
         this.upgradeLabel3 = new Label({
-            text: `MovementSpeed: ${this.scene.player1.movementSpeed}`,
+            text: `MovementSpeed: 500`,
             x: 10,
             y: 150,
             z: 10,
@@ -91,5 +91,33 @@ export class UI extends ScreenElement {
             })
         })
         this.addChild(this.upgradeLabel3)
+
+        this.upgradeLabel4 = new Label({
+            text: `HealthRegen: 0`,
+            x: 10,
+            y: 190,
+            z: 10,
+            font: new Font({
+                family: 'Arial',
+                size: 30,
+                unit: FontUnit.Px,
+                color: Color.White
+            })
+        })
+        this.addChild(this.upgradeLabel4)
+
+        this.upgradeLabel5 = new Label({
+            text: `Piercing: 1`,
+            x: 10,
+            y: 230,
+            z: 10,
+            font: new Font({
+                family: 'Arial',
+                size: 30,
+                unit: FontUnit.Px,
+                color: Color.White
+            })
+        })
+        this.addChild(this.upgradeLabel5)
     }
 }

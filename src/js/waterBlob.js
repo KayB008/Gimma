@@ -44,9 +44,12 @@ export class WaterBlob extends Actor {
         this.piercing = 1
         this.lastScoreForPiercing = 0
         this.nextPiercingScore = 100
-        this.pickupRange = 300
+        this.xpPickupRange = 300
+        this.xpValue = 1
         this.xp = 0
         this.lvl = 1
+        this.healthRegen = 0
+        this.healTimer = 0
     }
 
     movementSpeed = 500
@@ -108,10 +111,10 @@ export class WaterBlob extends Actor {
             this.shoot()
         }
 
-        if (this.xp >= (50 * 1.5 * this.lvl)) {
+        if (this.xp >= (50 * 1.2 * this.lvl)) {
             this.xp = 0
             this.lvl += 1
-            this.scene.ui.XPbar.scale = new Vector(this.scene.player1.xp / (50 * 1.5 * this.lvl), 1)
+            this.scene.ui.XPbar.scale = new Vector(this.scene.player1.xp / (50 * 1.2 * this.lvl), 1)
             this.scene.ui.lvlLabel.text = `Lvl: ${this.lvl}`
             if (this.levelUpBoost) {
                 this.levelUpBoost.card1.kill()
@@ -121,6 +124,17 @@ export class WaterBlob extends Actor {
             this.levelUpBoost = new LevelUpReward(this.pos.x, this.pos.y)
             this.scene.add(this.levelUpBoost)
         }
+
+        this.healTimer += delta / 1000
+        const secondsPerHeal = 20
+
+        if (this.healTimer >= secondsPerHeal) {
+            this.healTimer -= secondsPerHeal
+            this.health += this.healthRegen
+            this.scene.ui.healthbar.scale = new Vector(this.scene.player1.health / 100, 1)
+            this.scene.ui.healthLabel.text = `Health: ${this.scene.player1.health}`
+        }
+
     }
 
     shoot() {
@@ -134,9 +148,6 @@ export class WaterBlob extends Actor {
             this.scene.ui.healthbar.scale = new Vector(this.health / 100, 1)
             this.scene.ui.healthLabel.text = `Health: ${this.health}`
             this.score += 1
-            other.owner.kill()
-        }
-        if (other.owner instanceof LevelUpReward) {
             other.owner.kill()
         }
     }

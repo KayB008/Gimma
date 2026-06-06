@@ -16,7 +16,7 @@ export class GameScene extends Scene {
 
 
         this.time = 0
-        this.lastThirtySeconds = 0
+        this.lastNintySeconds = 0
         this.newLavaCrawler = 0
         this.lavaCrawlerHealth = 1
         this.lavaCrawlerChaseSpeed = 150
@@ -36,10 +36,10 @@ export class GameScene extends Scene {
     onPostUpdate(engine, delta) {
         this.time += delta / 1000
 
-        if (this.time > 0 && Math.round(this.time) % 90 === 0 && this.lastThirtySeconds !== Math.round(this.time)) {
-            this.lavaCrawlerHealth *= 2
+        if (this.time > 0 && Math.round(this.time) % 90 === 0 && this.lastNintySeconds !== Math.round(this.time)) {
+            this.lavaCrawlerHealth *= 1.5
             this.lavaCrawlerChaseSpeed += 5
-            this.lastThirtySeconds = Math.round(this.time)
+            this.lastNintySeconds = Math.round(this.time)
         }
 
         this.newHealthPack++

@@ -29,7 +29,7 @@ export class XP extends Actor {
 
     onPostUpdate(delta) {
         let distance = this.scene.player1.pos.distance(this.pos)
-        if (distance < this.scene.player1.pickupRange) {
+        if (distance < this.scene.player1.xpPickupRange) {
             this.inRange = true
         }
 
@@ -43,7 +43,7 @@ export class XP extends Actor {
     onCollisionStart(event, other) {
         if (other.owner instanceof WaterBlob) {
             this.kill()
-            other.owner.xp += 1
+            other.owner.xp += this.scene.player1.xpValue
             this.scene.ui.XPbar.scale = new Vector(this.scene.player1.xp / (50 * 1.5 * this.scene.player1.lvl), 1)
         }
     }

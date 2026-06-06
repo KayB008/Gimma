@@ -12,7 +12,7 @@ const Resources = {
     DamageBoost: new ImageSource('images/damageUp.png'),
     FireRateBoost: new ImageSource('images/fireRateUp.png'),
     MovementSpeedBoost: new ImageSource('images/movementSpeedUp.png'),
-    PiercingUp: new ImageSource('images/piercingUp.png'),
+    PiercingBoost: new ImageSource('images/piercingUp.png'),
     AutomaticHealthRegen: new ImageSource('images/automaticHealthRegen.png'),
     XpPickupRangeBoost: new ImageSource('images/xpPickupRangeUp.png'),
     XpValueBoost: new ImageSource('images/xpValueUp.png'),
