@@ -52,6 +52,7 @@ export class WaterBlob extends Player {
         this.lvl = 1
         this.healthRegen = 0
         this.healTimer = 0
+        this.cardsOnMap = false
     }
 
     onPostUpdate(engine, delta) {
@@ -90,9 +91,13 @@ export class WaterBlob extends Player {
                 this.levelUpBoost.card1.kill()
                 this.levelUpBoost.card2.kill()
                 this.levelUpBoost.card3.kill()
+                this.cardsOnMap = false
             }
-            this.levelUpBoost = new LevelUpReward(this.pos.x, this.pos.y)
-            this.scene.add(this.levelUpBoost)
+            if (this.cardsOnMap === false) {
+                this.levelUpBoost = new LevelUpReward(this.pos.x, this.pos.y)
+                this.scene.add(this.levelUpBoost)
+                this.cardsOnMap = true
+            }
         }
 
         this.healTimer += delta / 1000

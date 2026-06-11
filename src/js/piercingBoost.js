@@ -40,6 +40,7 @@ export class PiercingBoost extends Actor {
             this.scene.player1.levelUpBoost.card1.kill()
             this.scene.player1.levelUpBoost.card2.kill()
             this.scene.player1.levelUpBoost.card3.kill()
+            this.scene.player1.cardsOnMap = false
         }
     }
 
