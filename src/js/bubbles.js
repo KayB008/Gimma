@@ -3,6 +3,7 @@ import { Resources } from "./resources.js"
 import { Game } from './game.js'
 import { Map } from './map.js'
 import { LavaCrawler } from './lavaCrawler.js'
+import { LavaBeast } from './lavaBeast.js'
 
 export class Bubbles extends Actor {
 
@@ -34,11 +35,12 @@ export class Bubbles extends Actor {
         let target = null
         let bestDist = Infinity
         for (const actor of this.scene.actors) {
-            if (!(actor instanceof LavaCrawler)) continue
-            const distance = actor.pos.distance(this.pos)
-            if (distance <= maxDist && distance < bestDist) {
-                bestDist = distance
-                target = actor
+            if (actor instanceof LavaCrawler || actor instanceof LavaBeast) {
+                const distance = actor.pos.distance(this.pos)
+                if (distance <= maxDist && distance < bestDist) {
+                    bestDist = distance
+                    target = actor
+                }
             }
         }
 

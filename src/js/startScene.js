@@ -23,7 +23,7 @@ export class StartScene extends Scene {
 
         // instructie
         this.instruct = new Label({
-            text: "Druk op SPACE om te beginnen",
+            text: "Druk op ENTER om te beginnen",
             color: Color.White,
             font: new Font({ size: 40, unit: FontUnit.Px })
         })
@@ -31,7 +31,7 @@ export class StartScene extends Scene {
 
         // input
         engine.input.keyboard.on("press", (evt) => {
-            if (evt.key === "Space") this.startGame(engine)
+            if (evt.key === "Enter") this.startGame(engine)
         })
 
         this.updateLayout(engine)
@@ -55,6 +55,7 @@ export class StartScene extends Scene {
     }
 
     startGame(engine) {
+        engine.resetGameScene()
         engine.goToScene("game")
     }
 }

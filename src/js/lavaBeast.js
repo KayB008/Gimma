@@ -1,0 +1,81 @@
+import { Actor, Vector, randomInRange, Color, Timer } from "excalibur"
+import { Resources } from "./resources.js"
+import { Map } from './map.js'
+import { Bubbles } from './bubbles.js'
+import { XP } from './XP.js'
+
+export class LavaBeast extends Actor {
+
+    map = new Map()
+
+    constructor(h, c) {
+        super({
+            width: Resources.LavaBeast.width,
+            height: Resources.LavaBeast.height
+        });
+        this.startHealth = h
+        this.startChaseSpeed = c
+    }
+
+    onInitialize(engine) {
+        this.scale = new Vector(0.5, 0.5)
+
+        this.chaseSpeed = this.startChaseSpeed
+        this.health = this.startHealth
+        this.lastThirtySeconds = 0
+        this.healthPre = this.health
+
+
+        this.graphics.use(Resources.LavaBeast.toSprite())
+        this.pos = new Vector(randomInRange(0, Math.abs(this.map.mapWidth)),
+            randomInRange(0, this.map.mapHeight))
+        const distance = this.scene.player1.pos.distance(this.pos)
+        this.vel = new Vector(0, 0)
+
+
+        if (this.vel.x > 0) {
+            this.graphics.flipHorizontal = true
+        }
+
+        this.time = 0
+        this.wobbleSpeed = randomInRange(1, 3)
+        this.amplitude = randomInRange(1, 2)
+
+        if (distance < 500) {
+            this.kill()
+        }
+    }
+
+
+    onPostUpdate(engine, delta) {
+        this.time += delta / 1000
+
+
+        if (this.health < this.healthPre) {
+            this.actions.blink(100, 100, 2)
+            this.healthPre = this.health
+        }
+
+        if (this.health <= 0) {
+            this.scene.player1.score += 1
+            for (let i = 0; i < 10; i++) {
+                let xp = new XP(this.pos.x, this.pos.y)
+                this.scene.add(xp)
+            }
+            this.kill()
+        }
+
+        this.pos.y = this.pos.y + Math.sin(this.time * this.wobbleSpeed) * this.amplitude
+
+        this.vel = this.scene.player1.pos.sub(this.pos).normalize().scale(this.chaseSpeed)
+        this.graphics.flipHorizontal = this.vel.x > 0
+    }
+
+    onCollisionStart(event, other) {
+        if (other.owner instanceof Bubbles) {
+            this.health -= this.scene.player1.damage
+            other.owner.bubbleHealth -= 1
+        }
+    }
+
+}

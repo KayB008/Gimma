@@ -3,11 +3,13 @@ import { Actor, Engine, Vector, DisplayMode, randomInRange, Label, Font, FontUni
 import { Resources, ResourceLoader } from './resources.js'
 import { Map } from './map.js'
 import { LavaCrawler } from './lavaCrawler.js'
+import { LavaBeast } from './lavaBeast.js'
 import { Bubbles } from './bubbles.js'
 import { LevelUpReward } from './levelUpReward.js'
+import { Player } from './player.js'
 
 
-export class WaterBlob extends Actor {
+export class WaterBlob extends Player {
 
     map = new Map()
 
@@ -24,7 +26,7 @@ export class WaterBlob extends Actor {
     onInitialize(engine) {
         this.scale = new Vector(0.25, 0.25)
 
-        this.health = 100
+        this.health = 1
 
         this.score = 0
 
@@ -52,32 +54,6 @@ export class WaterBlob extends Actor {
         this.healTimer = 0
     }
 
-    movementSpeed = 500
-
-    onPreUpdate(engine) {
-        //controls
-        let xspeed = 0
-        let yspeed = 0
-
-        if (engine.input.keyboard.isHeld(Keys.A) && this.playerNum === "player1") {
-            xspeed -= this.movementSpeed
-        }
-
-        if (engine.input.keyboard.isHeld(Keys.D) && this.playerNum === "player1") {
-            xspeed += this.movementSpeed
-        }
-
-        if (engine.input.keyboard.isHeld(Keys.W) && this.playerNum === "player1") {
-            yspeed -= this.movementSpeed
-        }
-
-        if (engine.input.keyboard.isHeld(Keys.S) && this.playerNum === "player1") {
-            yspeed += this.movementSpeed
-        }
-
-        this.vel = new Vector(xspeed, yspeed)
-    }
-
     onPostUpdate(engine, delta) {
         if (this.pos.x <= Math.abs(Resources.WaterBlob.width) / 8) {
             this.pos.x = Math.abs(Resources.WaterBlob.width) / 8
@@ -93,10 +69,9 @@ export class WaterBlob extends Actor {
         }
 
 
-        if (this.health <= 0) {
-            this.kill()
-            this.scene.engine.stop()
-        }
+        // if (this.health <= 0) {
+        //     this.kill()
+        // }
 
         this.time += delta / 1000
         this.SecondsPast = this.time
@@ -116,7 +91,7 @@ export class WaterBlob extends Actor {
             this.lvl += 1
             this.scene.ui.XPbar.scale = new Vector(this.scene.player1.xp / (50 * 1.2 * this.lvl), 1)
             this.scene.ui.lvlLabel.text = `Lvl: ${this.lvl}`
-            if (this.levelUpBoost) {
+            if (this.levelUpBoost && (this.levelUpBoost.card1 || this.levelUpBoost.card2 || this.levelUpBoost.card3)) {
                 this.levelUpBoost.card1.kill()
                 this.levelUpBoost.card2.kill()
                 this.levelUpBoost.card3.kill()
@@ -144,7 +119,14 @@ export class WaterBlob extends Actor {
 
     onCollisionStart(event, other) {
         if (other.owner instanceof LavaCrawler) {
-            this.health -= 10
+            this.health -= this.scene.lavaCrawlerDamage
+            this.scene.ui.healthbar.scale = new Vector(this.health / 100, 1)
+            this.scene.ui.healthLabel.text = `Health: ${this.health}`
+            this.score += 1
+            other.owner.kill()
+        }
+        if (other.owner instanceof LavaBeast) {
+            this.health -= this.scene.lavaBeastDamage
             this.scene.ui.healthbar.scale = new Vector(this.health / 100, 1)
             this.scene.ui.healthLabel.text = `Health: ${this.health}`
             this.score += 1

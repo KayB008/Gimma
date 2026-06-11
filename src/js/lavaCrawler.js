@@ -67,9 +67,8 @@ export class LavaCrawler extends Actor {
 
         this.pos.y = this.pos.y + Math.sin(this.time * this.wobbleSpeed) * this.amplitude
 
-        this.actions.meet(this.scene.player1, this.chaseSpeed)
+        this.vel = this.scene.player1.pos.sub(this.pos).normalize().scale(this.chaseSpeed)
         this.graphics.flipHorizontal = this.vel.x > 0
-
     }
 
     onCollisionStart(event, other) {
