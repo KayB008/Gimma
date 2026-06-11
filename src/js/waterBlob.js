@@ -26,7 +26,7 @@ export class WaterBlob extends Player {
     onInitialize(engine) {
         this.scale = new Vector(0.25, 0.25)
 
-        this.health = 1
+        this.health = 100
 
         this.score = 0
 
@@ -67,11 +67,6 @@ export class WaterBlob extends Player {
         if (this.pos.y <= Math.abs(Resources.WaterBlob.height) / 8) {
             this.pos.y = Math.abs(Resources.WaterBlob.height) / 8
         }
-
-
-        // if (this.health <= 0) {
-        //     this.kill()
-        // }
 
         this.time += delta / 1000
         this.SecondsPast = this.time
